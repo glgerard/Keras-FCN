@@ -51,7 +51,9 @@ def inference(model_name, weight_file, image_size, image_list, data_dir, label_d
         # long_side = max(img_h, img_w, image_size[0], image_size[1])
         pad_w = max(image_size[1] - img_w, 0)
         pad_h = max(image_size[0] - img_h, 0)
-        image = np.lib.pad(image, ((pad_h/2, pad_h - pad_h/2), (pad_w/2, pad_w - pad_w/2), (0, 0)), 'constant', constant_values=0.)
+        image = np.lib.pad(image, ((int(pad_h/2), int(pad_h - pad_h/2)),
+                                   (int(pad_w/2), int(pad_w - pad_w/2)), (0, 0)),
+                           'constant', constant_values=0.)
         # image -= mean_value
         '''img = array_to_img(image, 'channels_last', scale=False)
         img.show()
