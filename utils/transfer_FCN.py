@@ -117,7 +117,8 @@ def transfer_FCN_ResNet50():
 
     # Create model
     model = Model(img_input, x)
-    weights_path = os.path.expanduser(os.path.join('~', '.keras/models/fcn_resnet50_weights_tf_dim_ordering_tf_kernels.h5'))
+#    weights_path = os.path.expanduser(os.path.join('~', '.keras/models/fcn_resnet50_weights_tf_dim_ordering_tf_kernels.h5'))
+    weights_path = os.path.expanduser(os.path.join('~', '.keras/models/resnet50_fine_tuned.h5'))
 
     #transfer if weights have not been created
     if os.path.isfile(weights_path) == False:

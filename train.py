@@ -180,7 +180,7 @@ if __name__ == '__main__':
     else:
         weight_decay = 1e-4
     target_size = (320, 320)
-    dataset = 'VOC2012_BERKELEY'
+    dataset = 'CAMELYON16'
     if dataset == 'VOC2012_BERKELEY':
         # pascal voc + berkeley semantic contours annotations
         train_file_path = os.path.expanduser('~/.keras/datasets/VOC2012/combined_imageset_train.txt') #Data/VOClarge/VOC2012/ImageSets/Segmentation
@@ -205,10 +205,20 @@ if __name__ == '__main__':
         data_suffix='.jpg'
         ignore_label = None
         label_cval = 0
+    if dataset == 'CAMELYON16':
+        # pascal voc + berkeley semantic contours annotations
+        train_file_path = os.path.expanduser('~/.keras/datasets/CAMELYON16/data/fcn_train.txt') #Data/VOClarge/VOC2012/ImageSets/Segmentation
+        # train_file_path = os.path.expanduser('~/.keras/datasets/oneimage/train.txt') #Data/VOClarge/VOC2012/ImageSets/Segmentation
+        val_file_path   = os.path.expanduser('~/.keras/datasets/CAMELYON16/data/fcn_val.txt')
+        data_dir        = os.path.expanduser('~/.keras/datasets/CAMELYON16/data/patches')
+        label_dir       = os.path.expanduser('~/.keras/datasets/CAMELYON16/data/mask')
+        data_suffix='.jpg'
+        label_suffix='.jpg'
+        classes = 2
 
 
     # ###################### loss function & metric ########################
-    if dataset == 'VOC2012' or dataset == 'VOC2012_BERKELEY':
+    if dataset == 'VOC2012' or dataset == 'VOC2012_BERKELEY' or dataset == 'CAMELYON16':
         loss_fn = softmax_sparse_crossentropy_ignoring_last_label
         metrics = [sparse_accuracy_ignoring_last_label]
         loss_shape = None
