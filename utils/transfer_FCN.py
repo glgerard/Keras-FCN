@@ -127,19 +127,21 @@ def transfer_FCN_ResNet50():
         for layer in flattened_layers:
             if layer.name:
                 index[layer.name]=layer
-    		base_model = ResNet50(include_top=False)
-    		# add a global spatial average pooling layer
-    		x = base_model.output
-    		x = GlobalAveragePooling2D()(x)
-    		# let's add a fully-connected layer
-    		x = Dense(1024, activation='relu',name='fc1024')(x)
-    		# and a logistic layer with 2 final classes
-    		predictions = Dense(2, activation='softmax')(x)
-    		model = Model(inputs=base_model.input, outputs=predictions)
-		model.load_weights(os.path.expanduser(os.path.join('~','.keras/models/resnet50_fine_tuned.h5')))
+        base_model = ResNet50(include_top=False)
+        # add a global spatial average pooling layer
+        x = base_model.output
+        x = GlobalAveragePooling2D()(x)
+        # let's add a fully-connected layer
+        x = Dense(1024, activation='relu',name='fc1024')(x)
+        # and a logistic layer with 2 final classes
+        predictions = Dense(2, activation='softmax', name='final_fc')(x)
+        model = Model(inputs=base_model.input, outputs=predictions)
+        model.load_weights(os.path.expanduser(os.path.join('~','.keras/models/resnet50_fine_tuned.h5')))
         for layer in model.layers:
-	    print(layer.name)
             weights = layer.get_weights()
+            print(layer.name)
+            for w in weights:
+                print(w.shape)
             if layer.name=='fc1024':
                 weights[0] = np.reshape(weights[0], (1,1,2048,1024))
             if layer.name=='final_fc':
