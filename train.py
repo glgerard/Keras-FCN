@@ -1,22 +1,13 @@
-import numpy as np
-import matplotlib.pyplot as plt
 from pylab import *
-import os
-import sys
-import pickle
 from keras.optimizers import SGD, Adam, Nadam
 from keras.callbacks import *
-from keras.objectives import *
 from keras.metrics import binary_accuracy
-from keras.models import load_model
-import keras.backend as K
 #import keras.utils.visualize_util as vis_util
 
 from models import *
 from utils.loss_function import *
 from utils.metrics import *
 from utils.SegDataGenerator import *
-import time
 
 
 def train(batch_size, epochs, lr_base, lr_power, weight_decay, classes,
@@ -34,7 +25,6 @@ def train(batch_size, epochs, lr_base, lr_power, weight_decay, classes,
         input_shape = target_size + (3,)
     else:
         input_shape = (None, None, 3)
-    batch_shape = (batch_size,) + input_shape
 
     ###########################################################
     current_dir = os.path.dirname(os.path.realpath(__file__))

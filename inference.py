@@ -1,13 +1,7 @@
-import numpy as np
-import matplotlib.pyplot as plt
 from pylab import *
-import os
 import sys
-import cv2
 from PIL import Image
 from keras.preprocessing.image import *
-from keras.models import load_model
-import keras.backend as K
 from keras.applications.imagenet_utils import preprocess_input
 
 from models import *
@@ -20,7 +14,6 @@ def inference(model_name, weight_file, image_size, image_list, data_dir, label_d
     # mean_value = np.array([104.00699, 116.66877, 122.67892])
     batch_shape = (1, ) + image_size + (3, )
     save_path = os.path.join(current_dir, 'Models/'+model_name)
-    model_path = os.path.join(save_path, "model.json")
     checkpoint_path = os.path.join(save_path, weight_file)
     # model_path = os.path.join(current_dir, 'model_weights/fcn_atrous/model_change.hdf5')
     # model = FCN_Resnet50_32s((480,480,3))

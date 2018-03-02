@@ -1,20 +1,7 @@
-import numpy as np
-import matplotlib.pyplot as plt
-from pylab import *
-import os
-import sys
 from keras_contrib.applications import densenet
-from keras.models import Model
-from keras.regularizers import l2
-from keras.layers import *
-from keras.engine import Layer
-from keras.applications.vgg16 import *
 from keras.models import *
 from keras.applications.imagenet_utils import _obtain_input_shape
-import keras.backend as K
-import tensorflow as tf
 
-from utils.get_weights_path import *
 from utils.basics import *
 from utils.resnet_helpers import *
 from utils.BilinearUpSampling import *
@@ -41,10 +28,8 @@ def top(x, input_shape, classes, activation, weight_decay):
 def FCN_Vgg16_32s(input_shape=None, weight_decay=0., batch_momentum=0.9, batch_shape=None, classes=21):
     if batch_shape:
         img_input = Input(batch_shape=batch_shape)
-        image_size = batch_shape[1:3]
     else:
         img_input = Input(shape=input_shape)
-        image_size = input_shape[0:2]
     # Block 1
     x = Conv2D(64, (3, 3), activation='relu', padding='same', name='block1_conv1', kernel_regularizer=l2(weight_decay))(img_input)
     x = Conv2D(64, (3, 3), activation='relu', padding='same', name='block1_conv2', kernel_regularizer=l2(weight_decay))(x)
@@ -145,10 +130,8 @@ def AtrousFCN_Vgg16_16s(input_shape=None, weight_decay=0., batch_momentum=0.9, b
 def FCN_Resnet50_32s(input_shape = None, weight_decay=0., batch_momentum=0.9, batch_shape=None, classes=21):
     if batch_shape:
         img_input = Input(batch_shape=batch_shape)
-        image_size = batch_shape[1:3]
     else:
         img_input = Input(shape=input_shape)
-        image_size = input_shape[0:2]
 
     bn_axis = 3
 

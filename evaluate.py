@@ -1,15 +1,7 @@
-import numpy as np
-import matplotlib.pyplot as plt
 from pylab import *
-import os
-import sys
 import time
-import cv2
 from PIL import Image
 from keras.preprocessing.image import *
-from keras.utils.np_utils import to_categorical
-from keras.models import load_model
-import keras.backend as K
 
 from models import *
 from inference import inference
