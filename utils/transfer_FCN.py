@@ -113,12 +113,12 @@ def transfer_FCN_ResNet50():
     x = identity_block(3, [512, 512, 2048], stage=5, block='b')(x)
     x = identity_block(3, [512, 512, 2048], stage=5, block='c')(x)
 
-    x = Conv2D(1000, (1, 1), activation='linear', name='fc1000')(x)
+    x = Conv2D(1024, (1, 1), activation='relu', name='fc1024')(x)
+    x = Conv2D(4, (1, 1), activation='linear', name='final_fc')(x)
 
     # Create model
     model = Model(img_input, x)
-#    weights_path = os.path.expanduser(os.path.join('~', '.keras/models/fcn_resnet50_weights_tf_dim_ordering_tf_kernels.h5'))
-    weights_path = os.path.expanduser(os.path.join('~', '.keras/models/fcn_resnet50_fine_tuned.h5'))
+    weights_path = os.path.expanduser(os.path.join('~', '.keras/models/fcn_resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5'))
 
     #transfer if weights have not been created
     if os.path.isfile(weights_path) == False:
@@ -127,26 +127,25 @@ def transfer_FCN_ResNet50():
         for layer in flattened_layers:
             if layer.name:
                 index[layer.name]=layer
-        base_model = ResNet50(include_top=False)
+        base_model = ResNet50(include_top=False, input_shape=(224, 224, 3))
         # add a global spatial average pooling layer
         x = base_model.output
-        x = GlobalAveragePooling2D()(x)
         # let's add a fully-connected layer
-        x = Dense(1024, activation='relu',name='fc1024')(x)
-        # and a logistic layer with 2 final classes
-        predictions = Dense(2, activation='softmax', name='final_fc')(x)
+        x = Conv2D(1024, (1, 1), activation='relu', name='fc1024')(x)
+        # and a logistic layer with 4 final classes (normal, lesion, background)
+        predictions = Conv2D(4, (1, 1), activation='linear', name='final_fc')(x)
         model = Model(inputs=base_model.input, outputs=predictions)
-        model.load_weights(os.path.expanduser(os.path.join('~','.keras/models/resnet50_fine_tuned.h5')))
+        model.load_weights(os.path.expanduser(os.path.join('~','.keras/models/ft_resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5')))
         for layer in model.layers:
             weights = layer.get_weights()
             print(layer.name)
             for w in weights:
                 print(w.shape)
-            if layer.name=='fc1024':
-                weights[0] = np.reshape(weights[0], (1,1,2048,1024))
-            if layer.name=='final_fc':
-                weights[0] = np.reshape(weights[0], (1,1,1024,2))
-            if index.has_key(layer.name):
+#            if layer.name=='fc1024':
+#                weights[0] = np.reshape(weights[0], (1,1,2048,1024))
+#            if layer.name=='final_fc':
+#                weights[0] = np.reshape(weights[0], (1,1,1024,2))
+            if layer.name in index.keys():
                 index[layer.name].set_weights(weights)
         model.save_weights(weights_path)
         print( 'Successfully transformed!')

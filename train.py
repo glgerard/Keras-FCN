@@ -197,14 +197,14 @@ if __name__ == '__main__':
         label_cval = 0
     if dataset == 'CAMELYON16':
         # pascal voc + berkeley semantic contours annotations
-        train_file_path = os.path.expanduser('~/.keras/datasets/CAMELYON16/data/fcn_train.txt') #Data/VOClarge/VOC2012/ImageSets/Segmentation
+        train_file_path = os.path.expanduser('fcn_train.csv') #Data/VOClarge/VOC2012/ImageSets/Segmentation
         # train_file_path = os.path.expanduser('~/.keras/datasets/oneimage/train.txt') #Data/VOClarge/VOC2012/ImageSets/Segmentation
-        val_file_path   = os.path.expanduser('~/.keras/datasets/CAMELYON16/data/fcn_val.txt')
-        data_dir        = os.path.expanduser('~/.keras/datasets/CAMELYON16/data/patches')
-        label_dir       = os.path.expanduser('~/.keras/datasets/CAMELYON16/data/mask')
-        data_suffix='.jpg'
-        label_suffix='.jpg'
-        classes = 2
+        val_file_path   = os.path.expanduser('fcn_val.csv')
+        data_dir        = os.path.expanduser('data/images')
+        label_dir       = os.path.expanduser('data/annotations')
+        data_suffix=''
+        label_suffix=''
+        classes = 4
 
 
     # ###################### loss function & metric ########################
