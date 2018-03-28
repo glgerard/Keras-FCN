@@ -22,7 +22,7 @@ def inference(model_name, weight_file, image_size, image_list, data_dir, label_d
     session = tf.Session(config=config)
     K.set_session(session)
 
-    model = globals()[model_name](batch_shape=batch_shape, input_shape=(512, 512, 3))
+    model = globals()[model_name](batch_shape=batch_shape, classes=4)
     model.load_weights(checkpoint_path, by_name=True)
 
     model.summary()
@@ -71,17 +71,18 @@ def inference(model_name, weight_file, image_size, image_list, data_dir, label_d
     return results
 
 if __name__ == '__main__':
-    model_name = 'AtrousFCN_Resnet50_16s_ft'
+    model_name = 'AtrousFCN_Resnet50_16s'
     # model_name = 'Atrous_DenseNet'
     # model_name = 'DenseNet_FCN'
     weight_file = 'checkpoint_weights.hdf5'
-    image_size = (512, 512)
+    image_size = (224, 224)
 #    data_dir        = os.path.expanduser('~/.keras/datasets/VOC2012/VOCdevkit/VOC2012/JPEGImages')
 #    label_dir       = os.path.expanduser('~/.keras/datasets/VOC2012/VOCdevkit/VOC2012/SegmentationClass')
-    data_dir        = os.path.expanduser('~/.keras/datasets/CAMELYON16/data/patches')
-    label_dir       = os.path.expanduser('~/.keras/datasets/CAMELYON16/data/mask')
+    data_dir        = os.path.expanduser('images')
+    label_dir       = os.path.expanduser('annotations')
+    save_dir        = os.path.expanduser('results')
 
     image_list = sys.argv[1:]#'2007_000491'
-    results = inference(model_name, weight_file, image_size, image_list, data_dir, label_dir)
-    for result in results:
-        result.show(title='result', command=None)
+    results = inference(model_name, weight_file, image_size, image_list, data_dir, label_dir, False, save_dir)
+#    for result in results:
+#        result.show(title='result', command=None)
