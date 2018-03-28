@@ -200,10 +200,10 @@ if __name__ == '__main__':
         train_file_path = os.path.expanduser('fcn_train.csv') #Data/VOClarge/VOC2012/ImageSets/Segmentation
         # train_file_path = os.path.expanduser('~/.keras/datasets/oneimage/train.txt') #Data/VOClarge/VOC2012/ImageSets/Segmentation
         val_file_path   = os.path.expanduser('fcn_val.csv')
-        data_dir        = os.path.expanduser('data/images')
-        label_dir       = os.path.expanduser('data/annotations')
-        data_suffix=''
-        label_suffix=''
+        data_dir        = os.path.expanduser('images')
+        label_dir       = os.path.expanduser('annotations')
+        data_suffix='.jpg'
+        label_suffix='.png'
         classes = 4
 
 
