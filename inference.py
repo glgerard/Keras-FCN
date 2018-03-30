@@ -12,7 +12,7 @@ def inference(model_name, weight_file, image_size, image_list, data_dir, label_d
               data_suffix='.jpg'):
     current_dir = os.path.dirname(os.path.realpath(__file__))
     # mean_value = np.array([104.00699, 116.66877, 122.67892])
-    batch_shape = (1, ) + image_size + (3, )
+    batch_shape = (4, ) + image_size + (3, )
     save_path = os.path.join(current_dir, 'Models/'+model_name)
     checkpoint_path = os.path.join(save_path, weight_file)
     # model_path = os.path.join(current_dir, 'model_weights/fcn_atrous/model_change.hdf5')
@@ -22,7 +22,7 @@ def inference(model_name, weight_file, image_size, image_list, data_dir, label_d
     session = tf.Session(config=config)
     K.set_session(session)
 
-    model = globals()[model_name](batch_shape=batch_shape, input_shape=(512, 512, 3))
+    model = globals()[model_name](batch_shape=batch_shape, classes=4)
     model.load_weights(checkpoint_path, by_name=True)
 
     model.summary()
@@ -61,6 +61,7 @@ def inference(model_name, weight_file, image_size, image_list, data_dir, label_d
 
         result_img = Image.fromarray(result, mode='P')
         result_img.palette = label.palette
+        print(label.palette)
         # result_img = result_img.resize(label_size, resample=Image.BILINEAR)
         result_img = result_img.crop((pad_w/2, pad_h/2, pad_w/2+img_w, pad_h/2+img_h))
         # result_img.show(title='result')
@@ -78,8 +79,8 @@ if __name__ == '__main__':
     image_size = (512, 512)
 #    data_dir        = os.path.expanduser('~/.keras/datasets/VOC2012/VOCdevkit/VOC2012/JPEGImages')
 #    label_dir       = os.path.expanduser('~/.keras/datasets/VOC2012/VOCdevkit/VOC2012/SegmentationClass')
-    data_dir        = os.path.expanduser('~/.keras/datasets/CAMELYON16/data/patches')
-    label_dir       = os.path.expanduser('~/.keras/datasets/CAMELYON16/data/mask')
+    data_dir        = os.path.expanduser('images')
+    label_dir       = os.path.expanduser('annotations')
 
     image_list = sys.argv[1:]#'2007_000491'
     results = inference(model_name, weight_file, image_size, image_list, data_dir, label_dir)
